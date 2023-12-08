@@ -1,12 +1,12 @@
 import { AddVillageProps } from "@client/request";
-import { isEmpty } from "lodash";
+import { isEmpty, startCase } from "lodash";
 import { ClientRequest, Response, Router } from "express";
 import { ProfileVillage } from "../../../models";
 
 const router: Router = Router();
 
 router.post(
-  "/add-villages",
+  "/villages",
   async (req: ClientRequest<AddVillageProps>, res: Response) => {
     try {
       if (isEmpty(req.body.name)) {
@@ -17,7 +17,7 @@ router.post(
       }
 
       const addProfilevillage = await ProfileVillage.create({
-        name: req.body.name,
+        name: startCase(req.body.name),
       });
 
       res.status(201).json(addProfilevillage);
@@ -28,7 +28,7 @@ router.post(
   }
 );
 
-router.get("/get-villages", async (_, res) => {
+router.get("/villages", async (_, res) => {
   try {
     const profileVillages = await ProfileVillage.findAll();
     res.json(profileVillages);

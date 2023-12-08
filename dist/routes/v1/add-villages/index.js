@@ -15,7 +15,7 @@ const express_1 = require("express");
 const models_1 = require("../../../models");
 const router = (0, express_1.Router)();
 exports.router = router;
-router.post("/add-villages", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.post("/villages", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if ((0, lodash_1.isEmpty)(req.body.name)) {
             res
@@ -24,7 +24,7 @@ router.post("/add-villages", (req, res) => __awaiter(void 0, void 0, void 0, fun
             return;
         }
         const addProfilevillage = yield models_1.ProfileVillage.create({
-            name: req.body.name,
+            name: (0, lodash_1.startCase)(req.body.name),
         });
         res.status(201).json(addProfilevillage);
     }
@@ -33,7 +33,7 @@ router.post("/add-villages", (req, res) => __awaiter(void 0, void 0, void 0, fun
         res.status(500).json({ error: "Internal Server Error" });
     }
 }));
-router.get("/get-villages", (_, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/villages", (_, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const profileVillages = yield models_1.ProfileVillage.findAll();
         res.json(profileVillages);
