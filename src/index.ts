@@ -1,12 +1,14 @@
-import express from "express";
-import dotenv from "dotenv";
+import { onInitializeApp } from "./config";
+import { router as routerV1 } from "./routes/v1";
 
-dotenv.config();
+onInitializeApp({
+  onSuccess: (_, app) => {
+    app.use("/v1", routerV1);
 
-const app = express();
-
-app.listen(process.env.SERVER_PORT, () => {
-  console.log(
-    `Your server running on http://localhost:${process.env.SERVER_PORT}`
-  );
+    app.listen(process.env.SERVER_PORT, () => {
+      console.log(`-> Server is running on port ${process.env.SERVER_PORT}`);
+      console.log("-> Connected to our database");
+    });
+  },
+  onError: (error) => console.log("Sequelize connection error: ", error),
 });

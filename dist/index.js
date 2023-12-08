@@ -1,12 +1,14 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
-const app = (0, express_1.default)();
-app.listen(process.env.SERVER_PORT, () => {
-    console.log(`Your server running on http://localhost:${process.env.SERVER_PORT}`);
+const config_1 = require("./config");
+const v1_1 = require("./routes/v1");
+(0, config_1.onInitializeApp)({
+    onSuccess: (_, app) => {
+        app.use("/v1", v1_1.router);
+        app.listen(process.env.SERVER_PORT, () => {
+            console.log(`-> Server is running on port ${process.env.SERVER_PORT}`);
+            console.log("-> Connected to our database");
+        });
+    },
+    onError: (error) => console.log("Sequelize connection error: ", error),
 });
