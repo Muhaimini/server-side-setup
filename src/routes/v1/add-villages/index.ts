@@ -1,13 +1,40 @@
-import { AddVillageProps } from "@client/request";
+import { AddVillage, DeleteByPK } from "@client/request";
 import { isEmpty, startCase } from "lodash";
 import { ClientRequest, Response, Router } from "express";
 import { ProfileVillage } from "../../../models";
 
 const router: Router = Router();
 
+router.delete(
+  "/villages",
+  async (req: ClientRequest<DeleteByPK>, res: Response) => {
+    try {
+      const villageId = req.body.id;
+
+      if (!villageId) {
+        res.status(400).json({ message: "Invalid id" });
+        return;
+      }
+
+      const profileVillage = await ProfileVillage.findByPk(villageId);
+
+      if (!profileVillage) {
+        res.status(404).json({ error: "Village not found" });
+        return;
+      }
+
+      await profileVillage.destroy();
+      res.status(200).json({ message: "Village successfully deleted" });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  }
+);
+
 router.post(
   "/villages",
-  async (req: ClientRequest<AddVillageProps>, res: Response) => {
+  async (req: ClientRequest<AddVillage>, res: Response) => {
     try {
       if (isEmpty(req.body.name)) {
         res

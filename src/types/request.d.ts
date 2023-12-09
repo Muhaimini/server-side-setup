@@ -1,6 +1,10 @@
 declare module "@client/request" {
-  interface AddVillageProps {
+  interface AddVillage {
     name: string;
+  }
+
+  interface DeleteByPK {
+    id: string;
   }
 }
 

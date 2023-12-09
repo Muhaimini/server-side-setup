@@ -15,6 +15,26 @@ const express_1 = require("express");
 const models_1 = require("../../../models");
 const router = (0, express_1.Router)();
 exports.router = router;
+router.delete("/villages", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const villageId = req.body.id;
+        if (!villageId) {
+            res.status(400).json({ message: "Invalid id" });
+            return;
+        }
+        const profileVillage = yield models_1.ProfileVillage.findByPk(villageId);
+        if (!profileVillage) {
+            res.status(404).json({ error: "Village not found" });
+            return;
+        }
+        yield profileVillage.destroy();
+        res.status(200).json({ message: "Village successfully deleted" });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+}));
 router.post("/villages", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if ((0, lodash_1.isEmpty)(req.body.name)) {
