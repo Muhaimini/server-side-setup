@@ -13,6 +13,7 @@ exports.router = void 0;
 const lodash_1 = require("lodash");
 const express_1 = require("express");
 const models_1 = require("../../../models");
+const response_1 = require("../../../helper/response");
 const router = (0, express_1.Router)();
 exports.router = router;
 router.delete("/villages", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -46,7 +47,10 @@ router.post("/villages", (req, res) => __awaiter(void 0, void 0, void 0, functio
         const addProfilevillage = yield models_1.ProfileVillage.create({
             name: (0, lodash_1.startCase)(req.body.name),
         });
-        res.status(201).json(addProfilevillage);
+        res.status(201).json((0, response_1.jsonResponse)({
+            response: addProfilevillage,
+            message: "Village created",
+        }));
     }
     catch (error) {
         console.log(error);
@@ -56,7 +60,7 @@ router.post("/villages", (req, res) => __awaiter(void 0, void 0, void 0, functio
 router.get("/villages", (_, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const profileVillages = yield models_1.ProfileVillage.findAll();
-        res.json(profileVillages);
+        res.json((0, response_1.jsonResponse)({ response: profileVillages }));
     }
     catch (error) {
         console.error("Error fetching profile villages:", error);

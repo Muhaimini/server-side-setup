@@ -2,6 +2,7 @@ import { AddVillage, DeleteByPK } from "@client/request";
 import { isEmpty, startCase } from "lodash";
 import { ClientRequest, Response, Router } from "express";
 import { ProfileVillage } from "../../../models";
+import { jsonResponse } from "../../../helper/response";
 
 const router: Router = Router();
 
@@ -47,7 +48,12 @@ router.post(
         name: startCase(req.body.name),
       });
 
-      res.status(201).json(addProfilevillage);
+      res.status(201).json(
+        jsonResponse({
+          response: addProfilevillage,
+          message: "Village created",
+        })
+      );
     } catch (error) {
       console.log(error);
       res.status(500).json({ error: "Internal Server Error" });
@@ -58,7 +64,7 @@ router.post(
 router.get("/villages", async (_, res) => {
   try {
     const profileVillages = await ProfileVillage.findAll();
-    res.json(profileVillages);
+    res.json(jsonResponse({ response: profileVillages }));
   } catch (error) {
     console.error("Error fetching profile villages:", error);
     res.status(500).json({ error: "Internal Server Error" });
